@@ -21,4 +21,21 @@ To create the molecular dataset, use:
 To train the model, simply run:
 * ```python train.py```
 
-All the relevant information for the training procedure, such as number of epochs, batch size, dimension of the latent space and many others, can be set in the ```parameters.py``` file.
+All the relevant information for the training procedure, such as number of epochs, batch size, dimension of the latent space and many others, can be set in the ```parameters.py``` file. By default, the results will be saved within a folder using the following structure:
+
+```
+results
+└───property_name
+│   └───timestamp
+│       │   log.csv
+│       │   log_val.csv
+│       │   gvae_encoder.pth
+│       |   ...
+|       └───evaluation
+|           |   latent_space.png
+|           |   metrics.json
+|           |   ...
+└───property_name
+    └───timestamp
+    ...
+```
