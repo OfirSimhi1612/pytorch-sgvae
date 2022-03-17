@@ -39,7 +39,7 @@ results
     └───timestamp
     ...
 ```
-```property_name``` refers to the chosen property to train the model with. In case you run it without any property (vanilla GVAE), such folder will be named as ```no_prop```. ```timestamp``` refers to current date and time, and the folder will be name as follows: day_month_year_hour_minutes_seconds. Finally, most of the results of the model, such as the latent space visualization, metrics os prior validity and property prediction performance, will be saved in the ```evaluation``` folder.
+```property_name``` refers to the chosen property to train the model with. In case you run it without any property (vanilla GVAE), such folder will be named as ```no_prop```. ```timestamp``` refers to current date and time, and the folder will be name as follows: day_month_year_hour_minutes_seconds. Finally, most of the results of the model, such as the latent space visualization, metrics on prior validity and property prediction performance, will be saved in the ```evaluation``` folder.
 
 ## Testing
 
