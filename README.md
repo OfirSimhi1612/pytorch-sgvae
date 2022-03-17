@@ -53,3 +53,7 @@ The ```arguments``` that can be passed to the prompt are:
 ```--train_property``` (store true): train and test the property prediction model. By default, the model will be trained and tested 5 times, and the final results will be averaged.  
 ```--hyper_optim``` (store true): use this if you want to perform a grid search over the parameters of the property prediction model. We use the **scorch** module to perform the grid search. By default, only 50% of the training data is used in the search. You can change this and set novel hyperparameters to be searched within the file ```testing``` file. Be aware that the more data and hyperparameters are used, the longer the searching process will take.  
 ```--reconstruction``` (store true): use this to test the reconstruction accuracy of the model.
+
+## Example of result
+
+You can check an example of result obtained with the model trained with the HOMO energy property in the folder ```example```.
