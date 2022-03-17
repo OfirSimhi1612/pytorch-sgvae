@@ -1,5 +1,5 @@
 # Pytorch Implementation of the Supervised Grammar Variational Autoencoder Model
----
+
 This code is a pytorch implementation for the paper: https://doi.org/10.1021/acs.jcim.1c01573 
 
 
@@ -21,6 +21,6 @@ To create the molecular dataset, use:
 ## Training
 ---
 To train the model, simply run:
-* ```python make_dataset_grammar.py```
+* ```python train.py```
 
 All the relevant information for the training procedure, such as number of epochs, batch size, dimension of the latent space and many others, can be set in the ```parameters.py``` file.
