@@ -40,3 +40,16 @@ results
     ...
 ```
 ```property_name``` refers to the chosen property to train the model with. In case you run it without any property (vanilla GVAE), such folder will be named as ```no_prop```. ```timestamp``` refers to current date and time, and the folder will be name as follows: day_month_year_hour_minutes_seconds. Finally, most of the results of the model, such as the latent space visualization, metrics os prior validity and property prediction performance, will be saved in the ```evaluation``` folder.
+
+## Testing
+
+To test the model, run:
+* ```python testing.py --arguments```
+
+The ```arguments``` that can be passed to the prompt are:
+```--path``` (str): path to the file. Ex: --path='results/energy_of_LUMO/16_03_2022_23_4_11'  
+```--plot``` (store true): plot the two first components of a PCA to visualize the latent space configuration. The TSNE is also set to be plotted.  
+```--evaluation``` (store true): use this if you want to calculate the prior validity, percentage of novel molecules and percentage of unique molecules.  
+```--train_property``` (store true): train and test the property prediction model. By default, the model will be trained and tested 5 times, and the final results will be averaged.  
+```--hyper_optim``` (store true): use this if you want to perform a grid search over the parameters of the property prediction model. We use the scorch module to perform the grid search. By default, only 50% of the training data is used in the search. You can change this and set novel hyperparameters to be searched within the file. Be aware that the more data and hyperparameters are used, the more the searching process will take.  
+```--reconstruction``` (store true): use this to test the reconstruction accuracy of the model.
