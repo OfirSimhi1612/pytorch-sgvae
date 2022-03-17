@@ -21,7 +21,7 @@ To create the molecular dataset, use:
 To train the model, simply run:
 * ```python train.py```
 
-All the relevant information for the training procedure, such as number of epochs, batch size, dimension of the latent space and many others, can be set in the ```parameters.py``` file. By default, the results will be saved within a folder using the following structure:
+All the relevant information for the training procedure, such as number of epochs, batch size, dimension of the latent space and many others, can be set in the ```parameters.py``` file. By default, the results will be saved in a sequence of folders using the following structure:
 
 ```
 results
@@ -39,3 +39,4 @@ results
     └───timestamp
     ...
 ```
+```property_name``` refers to the chosen property to train the model with. In case you run it without any property (vanilla GVAE), such folder will be named as ```no_prop```. ```timestamp``` refers to current date and time, and the folder will be name as follows: day_month_year_hour_minutes_seconds. Finally, most of the results of the model, such as the latent space visualization, metrics os prior validity and property prediction performance, will be saved in the ```evaluation``` folder.
