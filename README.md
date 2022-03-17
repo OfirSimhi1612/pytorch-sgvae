@@ -46,7 +46,7 @@ results
 To test the model, run:
 * ```python testing.py --arguments```
 
-The ```arguments``` that can be passed to the prompt are:
+The ```arguments``` that can be passed to the prompt are:  
 ```--path``` (str): path to the file. Ex: --path='results/energy_of_LUMO/16_03_2022_23_4_11'  
 ```--plot``` (store true): plot the two first components of a PCA to visualize the latent space configuration. The TSNE is also set to be plotted.  
 ```--evaluation``` (store true): use this if you want to calculate the prior validity, percentage of novel molecules and percentage of unique molecules.  
