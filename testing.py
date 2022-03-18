@@ -250,7 +250,8 @@ def reconstruction():
 
 def active_units(delta=0.01):
     """
-    Compute the number of active units
+    Compute the number of active units. It basically measures the standard deviation of each dimension of the latent space.
+    Dimensions with delta > 0.01 should have important and explainaible generative factors of the data.
     """
     testloader = DataLoader(smiles_test, batch_size=params['batch'], drop_last=True, shuffle=False)
 
