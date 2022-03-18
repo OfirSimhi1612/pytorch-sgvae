@@ -102,14 +102,7 @@ else:
 
 def normalize_data():
     """
-    Normalize the property values
-    
-    INPUTS:
-    params: file with the parameters to be used (parameters.py)
-    property_train: property values of molecules in the training set
-    
-    OUTPUTS:
-    Normalized data and the functionused to scale the data
+    Normalize the property values according to settings in the parameters.py file
     """
     
     # normalizing the property data
@@ -131,14 +124,8 @@ def normalize_data():
 
 def plot_latent_space(t_sne=True):
     """
-    Plots the latent space of a trained model.
-    
-    INPUTS:
-    z: latent space vector
-    params: file with the parameters to be used (parameters.py)
-    labels: property information to color the plot
-    title: title of the figure
-    n_data_plot: number of points to be plotted
+    Plots the latent space of a trained model. The number of data points to plot and the plot title are set in
+    the parameter.py file.
     """
     pca = PCA(n_components=2, random_state=1)
     pca_data = pca.fit_transform(z[:params['n_data_plot']])
@@ -184,10 +171,6 @@ def plot_latent_space(t_sne=True):
 def model_evaluation():
     """
     Evaluates a trained model on prior validity, percentage of novel molecules and percentage of unique molecules
-    INPUTS:
-    params: file with the parameters to be used (parameters.py)
-    decoder_weights: weights of the saved decoded
-    evaluation_path: path to save the results
     """
     decodings = []
     valid_decodings_percentage = []
@@ -311,12 +294,7 @@ def active_units(delta=0.01):
             
 def property_model_training():
     """
-    Trains and validate the property prediction model
-    INPUTS:
-    z: latent space vectors
-    params: file with the parameters to be used (parameters.py) 
-    property_train: property values of molecules in the training set
-    evaluation_path: path to save the results
+    Trains and validate the property prediction model using the encoded data as input
     """
     
     def reset_weights(m):
@@ -448,6 +426,9 @@ def property_model_training():
             
 
 def hyperparameter_optimization(fraction=0.5):
+    """
+    Performs a grid search over a number of parameters to improve the property prediction performance
+    """
     
     class FeedForwardHyperparameterOptimization(torch.nn.Module):
         """
@@ -458,12 +439,12 @@ def hyperparameter_optimization(fraction=0.5):
             
             self.feedforward = torch.nn.Sequential(
                 torch.nn.Linear(input_dim, hidden_units),
-                torch.nn.ReLU(),
+                torch.nn.LeakyReLU(),
                 torch.nn.Linear(hidden_units, hidden_units),
-                torch.nn.ReLU(),
+                torch.nn.LeakyReLU(),
                 torch.nn.Dropout(p=dropout),
                 torch.nn.Linear(hidden_units, hidden_units),
-                torch.nn.ReLU(),
+                torch.nn.LeakyReLU(),
                 torch.nn.Dropout(p=dropout),
                 torch.nn.Linear(hidden_units, 1)
                 )
@@ -506,9 +487,7 @@ def hyperparameter_optimization(fraction=0.5):
     with open(os.path.join(evaluation_path, 'prop_best_hyper.json'), 'w') as file:
             json.dump(best_hyper, file)
             
-
-    
-    
+ 
         
 if __name__ == "__main__":
     
