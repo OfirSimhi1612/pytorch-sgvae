@@ -51,7 +51,7 @@ The ```arguments``` that can be passed to the prompt are:
 ```--plot``` (store true): plot the two first components of a PCA to visualize the latent space configuration. The TSNE is also set to be plotted.  
 ```--evaluation``` (store true): use this if you want to calculate the prior validity, percentage of novel molecules and percentage of unique molecules.  
 ```--train_property``` (store true): train and test the property prediction model. By default, the model will be trained and tested 5 times, and the final results will be averaged.  
-```--hyper_optim``` (store true): use this if you want to perform a grid search over the parameters of the property prediction model. We use the **scorch** module to perform the grid search. By default, only 50% of the training data is used in the search. You can change this and set novel hyperparameters to be searched within the file ```testing``` file. Be aware that the more data and hyperparameters are used, the longer the searching process will take.  
+```--hyper_optim``` (store true): use this if you want to perform a grid search over the parameters of the property prediction model. We use the **scorch** module to perform the grid search. By default, only 50% of the training data is used in the search. You can change this and set novel hyperparameters to be searched within the ```testing.py``` file. Be aware that the more data and hyperparameters are used, the longer the searching process will take.  
 ```--reconstruction``` (store true): use this to test the reconstruction accuracy of the model.
 
 ## Example of result
