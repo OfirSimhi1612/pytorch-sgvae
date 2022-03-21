@@ -9,7 +9,7 @@ torch-1.10.0
 skorch-0.11.0  
 torchinfo-1.6.3
 
-We use torchinfo to have an output of the model architecture similar to keras' ```model.summary()```. It's not necessary for the code to run.
+We use torchinfo to have an output of the model's architecture similar to keras' ```model.summary()```. It's not necessary for the code to run.
 
 ## Creating the data set
 
