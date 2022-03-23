@@ -68,8 +68,8 @@ class GrammarModel:
     for ix, lhs in enumerate(self._grammar.lhs_list):
         self._lhs_map[lhs] = ix
     self._params = parameters
-    self._encoder = Encoder(params['latent_dim'])
-    self._decoder = Decoder(params['latent_dim'], params['n_layers'], params['max_length'])
+    self._encoder = Encoder()
+    self._decoder = Decoder()
 
 
   def encode(self, smiles):
