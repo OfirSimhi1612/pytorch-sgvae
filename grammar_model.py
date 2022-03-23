@@ -111,7 +111,7 @@ class GrammarModel:
     for t in range(unmasked.shape[1]):
         next_nonterminal = [self._lhs_map[pop_or_nothing(a)] for a in S]
         mask = self._grammar.masks[next_nonterminal]
-        masked_output = np.exp(unmasked[:,t,:]) * mask.detach().numpy() + eps #.cpu().detach().numpy()
+        masked_output = np.exp(unmasked[:,t,:]) * mask.cpu().detach().numpy() + eps #.cpu().detach().numpy()
         sampled_output = np.argmax(np.random.gumbel(size=masked_output.shape) + np.log(masked_output), axis=-1)
         X_hat[np.arange(unmasked.shape[0]), t, sampled_output] = 1.0
 
