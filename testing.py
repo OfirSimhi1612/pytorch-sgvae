@@ -256,7 +256,7 @@ def active_units(delta=0.01):
     testloader = DataLoader(smiles_test, batch_size=params['batch'], drop_last=True, shuffle=False)
 
     for idx, data in enumerate(testloader):
-        mu = model.encode(data)
+        mu = model.encode(data.to(device))
         
         if idx==0:
             batchSum = mu.sum(dim=0, keepdim=True)
@@ -268,7 +268,7 @@ def active_units(delta=0.01):
     testMean = batchSum / count
         
     for idx, data in enumerate(testloader):
-        mu = model.encode(data)
+        mu = model.encode(data.to(device))
         if idx == 0:
             testVarSum = ((mu - testMean) ** 2).sum(dim=0)
         else:
