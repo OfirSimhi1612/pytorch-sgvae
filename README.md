@@ -1,7 +1,4 @@
-# Pytorch Implementation of the Supervised Grammar Variational Autoencoder Model
-
-This code is a pytorch implementation for the paper: https://doi.org/10.1021/acs.jcim.1c01573 
-
+# Pytorch Implementation of the Semi-Supervised Grammar Variational Autoencoder Model
 
 ## Requirements
 
@@ -21,7 +18,7 @@ To create the molecular dataset, use:
 To train the model, simply run:
 * ```python train.py```
 
-All the relevant information for the training procedure, such as number of epochs, batch size, dimension of the latent space and many others, can be set in the ```parameters.py``` file. By default, the results will be saved in a sequence of folders using the following structure:
+All the relevant information for the training procedure, such as number of epochs, batch size, dimension of the latent space, percentage of labeled data and many others, can be set in the ```parameters.py``` file. By default, the results will be saved in a sequence of folders using the following structure:
 
 ```
 results
