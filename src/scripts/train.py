@@ -25,7 +25,7 @@ def prop_run():
     
     epochs = hyper_params['epochs']             
     batch = hyper_params['batch']               
-    max_length = hyper_params['max_length']  # it's the max number of rules needed to create a SMILES
+    input_dim = hyper_params['input_dim']  # it's the max number of rules needed to create a SMILES
     latent_dim = hyper_params['latent_dim']
     n_layers = hyper_params['n_layers']  # num of layers for GRU decoder
     hidden_layer = hyper_params['hidden_layer_prop']  # num of neurons of the property model
@@ -37,7 +37,7 @@ def prop_run():
     print('Dataset loaded. Length:', len(dataset))
 
     # splitting training and validation
-    chunk = int(hyper_params['valid_split'] * len(dataset))  
+    chunk = int(hyper_params['validation_split'] * len(dataset))  
     train_split, validation_split = random_split(dataset, [len(dataset) - chunk, chunk])
 
     trainloader = DataLoader(train_split, batch_size=batch, drop_last=True, shuffle=False, num_workers=2, pin_memory=True)
@@ -99,7 +99,7 @@ def prop_run():
             predictions = pp_model(z)
             x = x.transpose(1, 2).contiguous()
             x_decoded_mean = model.conditional(x, logits)
-            reconstruction_loss = max_length * criterion(x_decoded_mean.view(-1), x.view(-1))
+            reconstruction_loss = input_dim * criterion(x_decoded_mean.view(-1), x.view(-1))
             kl = model.kl(mu, sigma)
             property_loss = pp_loss(predictions.view(-1), label.to(device).float())
             if hyper_params['anneal_kl']:
@@ -154,7 +154,7 @@ def prop_run():
                 x_decoded_mean_val = model.conditional(x_val, logits_val)  
 
                 # calculating the errors
-                reconstruction_loss_val = max_length * criterion(x_decoded_mean_val.view(-1), x_val.view(-1))
+                reconstruction_loss_val = input_dim * criterion(x_decoded_mean_val.view(-1), x_val.view(-1))
                 kl_val = model.kl(mu_val, sigma_val) 
 
                 property_loss_val = pp_loss(predictions_val.view(-1), label_val.to(device).float()) 
@@ -208,7 +208,7 @@ def no_prop_run():
   
     epochs = hyper_params['epochs']
     batch = hyper_params['batch']
-    max_length = hyper_params['max_length']
+    input_dim = hyper_params['input_dim']
     latent_dim = hyper_params['latent_dim']
     n_layers = hyper_params['n_layers']  # num of layers for GRU decoder
     hidden_layer = hyper_params['hidden_layer_prop']  # num of neurons of the property model
@@ -218,7 +218,7 @@ def no_prop_run():
     dataset = TrainQM9dataset(hyper_params['dataset_path'], hyper_params['labels_path'], hyper_params['normalization'])
 
     # splitting training and validation
-    chunk = int(hyper_params['valid_split'] * len(dataset))  
+    chunk = int(hyper_params['validation_split'] * len(dataset))  
     train_split, validation_plit = random_split(dataset, [len(dataset) - chunk, chunk])
 
     trainloader = DataLoader(train_split, batch_size=batch, drop_last=True, shuffle=False, num_workers=2, pin_memory=True)
@@ -262,7 +262,7 @@ def no_prop_run():
         x_decoded_mean = model.conditional(x, logits)  
     
         # calculating the errors
-        reconstruction_loss = max_length * criterion(x_decoded_mean.view(-1), x.view(-1)) 
+        reconstruction_loss = input_dim * criterion(x_decoded_mean.view(-1), x.view(-1)) 
         kl = model.kl(mu, sigma)
     
         # annealing weigth beta to the kl
@@ -310,7 +310,7 @@ def no_prop_run():
             x_decoded_mean_val = model.conditional(x_val, logits_val)  
         
             # calculating the errors
-            reconstruction_loss_val = max_length * criterion(x_decoded_mean_val.view(-1), x_val.view(-1)) 
+            reconstruction_loss_val = input_dim * criterion(x_decoded_mean_val.view(-1), x_val.view(-1)) 
             kl_val = model.kl(mu_val, sigma_val)
             
             if hyper_params['anneal_kl']:

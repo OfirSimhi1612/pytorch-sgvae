@@ -38,7 +38,7 @@ class SGVAE(nn.Module):
     ix2 = torch.unsqueeze(grammar.ind_of_ind[most_likely], -1) # index ind_of_ind with res
     ix2 = ix2.type(torch.LongTensor)
     M2 = grammar.masks[list(ix2.T)]
-    M3 = torch.reshape(M2, (hyper_params['batch'], hyper_params['max_length'], grammar.D))
+    M3 = torch.reshape(M2, (hyper_params['batch'], hyper_params['input_dim'], grammar.D))
     P2 = torch.mul(torch.exp(x_pred), M3.float()) # apply them to the exp-predictions
     P2 = torch.divide(P2, torch.sum(P2, dim=-1, keepdims=True)) # normalize predictions
     return P2

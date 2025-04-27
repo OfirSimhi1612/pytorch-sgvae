@@ -79,11 +79,11 @@ class GrammarPreprocessor:
         parse_trees = [self._parser.parse(t).__next__() for t in tokens]
         productions_seq = [tree.productions() for tree in parse_trees]
         indices = [np.array([self._prod_map[prod] for prod in entry], dtype=int) for entry in productions_seq]
-        one_hot = np.zeros((len(indices), self._params['max_length'], self._n_chars), dtype=np.float32)
+        one_hot = np.zeros((len(indices), self._params['input_dim'], self._n_chars), dtype=np.float32)
         for i in range(len(indices)):
             num_productions = len(indices[i])
             one_hot[i][np.arange(num_productions),indices[i]] = 1.
-            one_hot[i][np.arange(num_productions, self._params['max_length']),-1] = 1.
+            one_hot[i][np.arange(num_productions, self._params['input_dim']),-1] = 1.
         one_hot = torch.from_numpy(one_hot).to(device)  # [batch, MAX_LEN, NUM_OF_RULES]
         one_hot = one_hot.transpose(1, 2)  # need to reshape to [batch, NUM_OF_RULES, MAX_LEN] for the convolution encoder
 

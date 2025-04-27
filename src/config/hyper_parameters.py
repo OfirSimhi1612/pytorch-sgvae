@@ -24,9 +24,9 @@ def _validate_params(params: Dict[str, Any]) -> Dict[str, Any]:
     # General
     _validate_type('epochs', params['epochs'], int)
     _validate_type('batch', params['batch'], int)
-    _validate_type('valid_split', params['valid_split'], float)
-    if not (0 < params['valid_split'] < 1):
-        raise ValueError("'valid_split' must be between 0 and 1")
+    _validate_type('validation_split', params['validation_split'], float)
+    if not (0 < params['validation_split'] < 1):
+        raise ValueError("'validation_split' must be between 0 and 1")
     _validate_type('dataset_path', params['dataset_path'], str)
     _validate_type('labels_path', params['labels_path'], str)
     _validate_type('prop_div', params['prop_div'], bool)
@@ -35,7 +35,7 @@ def _validate_params(params: Dict[str, Any]) -> Dict[str, Any]:
 
     # VAE general
     _validate_type('latent_dim', params['latent_dim'], int)
-    _validate_type('max_length', params['max_length'], int)
+    _validate_type('input_dim', params['input_dim'], int)
     _validate_type('anneal_kl', params['anneal_kl'], bool)
     _validate_type('n_cycle', params['n_cycle'], int)
     _validate_type('ratio_anneal_kl', params['ratio_anneal_kl'], float)

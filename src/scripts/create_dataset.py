@@ -1,3 +1,13 @@
+"""
+This script processes SMILES strings from the QM9 dataset and converts them into one-hot encoded representations
+based on a predefined grammar. The resulting one-hot encoded dataset is saved as an HDF5 file for later use.
+
+Sections:
+1. Load and split the QM9 dataset into training and testing sets.
+2. Define helper functions for converting SMILES strings to one-hot encoded representations.
+3. Main function to process the training SMILES strings and save the one-hot encoded dataset.
+"""
+
 import nltk
 from src import grammar
 import numpy as np
@@ -6,61 +16,93 @@ import pickle
 import random
 from src.config.hyper_parameters import hyper_params
 import src.grammar_preprocessor as grammar_preprocessor
+from tqdm import tqdm
+
+# Set random seed for reproducibility
 random.seed(42)
 
+# Load the QM9 dataset
 with open('data/QM9_STAR.pkl', 'rb') as data:
-    f = pickle.load(data)
-list_df = list(f.loc[:, 'SMILES_GDB-17'])
+    dataset = pickle.load(data)
 
-# list_df[:] = [Chem.MolToSmiles(Chem.MolFromSmiles(x), isomericSmiles=True, canonical=True) for x in list_df if x]
+# Extract SMILES strings from the dataset
+smiles_list = list(dataset.loc[:, 'SMILES_GDB-17'])
 
-# choosing random ids for train and test
-ids = list(range(len(list_df)))
+# Split dataset into training and testing sets
+ids = list(range(len(smiles_list)))
 random.shuffle(ids)
 
-chunk = int(0.04 * len(list_df))  # ~ 5k molecules for testing
-ids_train = sorted(ids[chunk:])
-ids_test = sorted(ids[0:chunk])
+test_chunk = int(hyper_params['testing_split'] * len(smiles_list))
+train_ids = sorted(ids[test_chunk:])
+test_ids = sorted(ids[:test_chunk])
 
-L = [list_df[i] for i in ids_train] # smiles for training
-L_test = [list_df[i] for i in ids_test] # smiles for test
+training_smiles = [smiles_list[i] for i in train_ids]  # SMILES for training
+testing_smiles = [smiles_list[i] for i in test_ids]  # SMILES for testing
 
-MAX_LEN = hyper_params['max_length']
-NCHARS = len(grammar.GCFG.productions())
+# Define constants
+input_dim = hyper_params['input_dim']  # Maximum sequence length for one-hot encoding
+num_grammar_rules = len(grammar.GCFG.productions())  # Number of grammar production rules
+
+# Map grammar productions to indices
+production_to_index = {prod: ix for ix, prod in enumerate(grammar.GCFG.productions())}
+parser = nltk.ChartParser(grammar.GCFG)
+
+# Tokenize SMILES strings
+tokenizer = grammar_preprocessor.get_zinc_tokenizer(grammar.GCFG)
 
 def to_one_hot(smiles):
-    """ Encode a list of smiles strings to one-hot vectors """
-    assert type(smiles) == list
-    prod_map = {}
-    for ix, prod in enumerate(grammar.GCFG.productions()):
-        prod_map[prod] = ix
-    tokenize = grammar_preprocessor.get_zinc_tokenizer(grammar.GCFG)
-    tokens = map(tokenize, smiles)
-    parser = nltk.ChartParser(grammar.GCFG)
+    """
+    Convert a list of SMILES strings into one-hot encoded representations based on the grammar.
+
+    Args:
+        smiles (list): List of SMILES strings.
+
+    Returns:
+        np.ndarray: One-hot encoded representation of the SMILES strings.
+    """
+    assert isinstance(smiles, list), "Input must be a list of SMILES strings."
+    
+    tokens = map(tokenizer, smiles)
+
+    # Parse tokens into production sequences
     parse_trees = [parser.parse(t).__next__() for t in tokens]
-    productions_seq = [tree.productions() for tree in parse_trees]
-    indices = [np.array([prod_map[prod] for prod in entry], dtype=int) for entry in productions_seq]
-    one_hot = np.zeros((len(indices), MAX_LEN, NCHARS), dtype=np.float32)
-    for i in range(len(indices)):
-        num_productions = len(indices[i])
-        one_hot[i][np.arange(num_productions),indices[i]] = 1.
-        one_hot[i][np.arange(num_productions, MAX_LEN),-1] = 1.
+    production_sequences = [tree.productions() for tree in parse_trees]
+
+    # Convert production sequences to indices
+    indices = [np.array([production_to_index[prod] for prod in sequence], dtype=int) for sequence in production_sequences]
+
+    # Initialize one-hot encoded array
+    one_hot = np.zeros((len(indices), input_dim, num_grammar_rules), dtype=np.float32)
+
+    # Populate one-hot encoded array
+    for i, sequence_indices in enumerate(indices):
+        num_productions = len(sequence_indices)
+        one_hot[i, np.arange(num_productions), sequence_indices] = 1.0
+        one_hot[i, np.arange(num_productions, input_dim), -1] = 1.0  # Padding
+
     return one_hot
 
-
 def main():
-    
-    OH = np.zeros((len(L),MAX_LEN,NCHARS))
-    for i in range(0, len(L), 100):
-        print('Processing: i=[' + str(i) + ':' + str(i+100) + ']')
-        onehot = to_one_hot(L[i:i+100])
-        OH[i:i+100,:,:] = onehot
+    """
+    Main function to process the training SMILES strings and save the one-hot encoded dataset in batches.
+    """
+    # Open the HDF5 file and create the dataset
+    with h5py.File('data/qm9_grammar_dataset.h5', 'w') as h5f:
+        dataset = h5f.create_dataset(
+            'data',
+            shape=(len(training_smiles), input_dim, num_grammar_rules),
+            dtype=np.float32
+        )
 
-        
-    h5f = h5py.File('data/qm9_grammar_dataset.h5','w')
-    h5f.create_dataset('data', data=OH)
-    h5f.close()
-    
+        # Process SMILES strings in batches with a progress bar
+        with tqdm(total=len(training_smiles), desc="Processing SMILES", unit=" smiles") as pbar:
+            for i in range(0, len(training_smiles), 100):
+                one_hot_batch = to_one_hot(training_smiles[i:i+100])
+                dataset[i:i+100, :, :] = one_hot_batch  # Write directly to the file
+                pbar.update(100)
+
+    print('One-hot encoded dataset saved to data/qm9_grammar_dataset.h5')
+
 if __name__ == '__main__':
     main()
 

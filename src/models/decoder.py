@@ -30,7 +30,7 @@ class Decoder(nn.Module):
 
   def forward(self, z):
     h = self.relu(self.linear_in(z))
-    h = h.unsqueeze(1).expand(-1, hyper_params['max_length'], -1)  #[batch, MAX_LENGHT, latent_dim] This does the same as the repeatvector on keras
+    h = h.unsqueeze(1).expand(-1, hyper_params['input_dim'], -1)  #[batch, MAX_LENGHT, latent_dim] This does the same as the repeatvector on keras
     h, _ = self.rnn(h)
     h = self.relu(self.linear_out(h))
 

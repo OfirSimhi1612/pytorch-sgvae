@@ -25,11 +25,6 @@ from sklearn.preprocessing import MinMaxScaler, StandardScaler
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 RDLogger.DisableLog('rdApp.*') 
 
-seed = 42
-torch.manual_seed(seed)
-random.seed(seed)
-np.random.seed(seed)
-
 # Parsing the arguments
 parser = argparse.ArgumentParser()
 parser.add_argument('--path', help='Path to the weights file', type=str)
@@ -41,6 +36,11 @@ parser.add_argument('--reconstruction', help='Estimates the reconstruction accur
 parser.add_argument('--active_units', help='Calculates the number of active units', action='store_true')
 args = parser.parse_args()
 path = args.path
+
+seed = 42
+torch.manual_seed(seed)
+random.seed(seed)
+np.random.seed(seed)
 
 # Folder to save the evaluations
 evaluation_path = os.path.join(path, 'evaluation')
@@ -324,7 +324,7 @@ def property_model_training():
     for i in range(len(z)):
         train_data.append([z[i], property_train_normalized[i]])
     
-    chunk = int(hyper_params['valid_split'] * len(train_data))  
+    chunk = int(hyper_params['validation_split'] * len(train_data))  
     train_split, validation_plit = random_split(train_data, [len(train_data) - chunk, chunk])
     
     trainloader = DataLoader(train_split, batch_size=hyper_params['batch'], drop_last=True, shuffle=False)
@@ -479,7 +479,6 @@ def hyperparameter_optimization(fraction=0.5):
     with open(os.path.join(evaluation_path, 'prop_best_hyper.json'), 'w') as file:
             json.dump(best_hyper, file)
             
- 
         
 if __name__ == "__main__":
 
