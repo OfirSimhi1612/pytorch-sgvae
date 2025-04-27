@@ -1,0 +1,31 @@
+# General
+epochs: 1
+batch: 128
+valid_split: 0.1  # Percentage of data to use as validation
+dataset_path: data/qm9_grammar_dataset.h5
+labels_path: data/QM9_STAR.pkl
+prop_div: true  # Whether or not divide the property value by the number of atoms
+plot_title: LUMO (eV)
+n_data_plot: 30000  # Number of data points for visualization of the latent space
+
+# VAE general
+latent_dim: 56
+max_length: 100
+anneal_kl: false
+n_cycle: 1  # num of cycles for KL annealing
+ratio_anneal_kl: 0.8
+
+# Neural networks
+n_layers: 3  # num of layers for GRU decoder
+hidden_layer_prop: 70  # num of neurons of the integrated property network
+hidden_layer_prop_pred: 256  # num of neurons of the separated property network
+learning_rate: 0.001
+learning_rate_prop: 0.001
+prop_weight: 1
+reconstruction_weight: 1
+kl_weight: 1
+
+# Property to be used in training
+prop_pred: true  # whether or not use property information for training
+prop: energy_of_LUMO
+normalization: standard  # how to normalize the property information (minmax, standard, none)
