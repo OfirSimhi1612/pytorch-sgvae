@@ -1,5 +1,6 @@
 import torch.nn as nn
 
+
 class PropertiesPredictionModel(nn.Module):
 
     def __init__(self, input_dim, hidden_size):
@@ -12,7 +13,7 @@ class PropertiesPredictionModel(nn.Module):
             nn.Linear(hidden_size, hidden_size),
             nn.LeakyReLU(),
             nn.BatchNorm1d(hidden_size),
-            nn.Linear(hidden_size, 1)
+            nn.Linear(hidden_size, 1),
         )
 
     def forward(self, x):

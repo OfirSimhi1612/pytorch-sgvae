@@ -1,1 +1,26 @@
-{"epochs": 1, "batch": 128, "validation_split": 0.1, "dataset_path": "data/qm9_grammar_dataset.h5", "labels_path": "data/QM9_STAR.pkl", "prop_div": true, "plot_title": "LUMO (eV)", "n_data_plot": 30000, "latent_dim": 56, "input_dim": 100, "anneal_kl": false, "n_cycle": 1, "ratio_anneal_kl": 0.8, "n_layers": 3, "hidden_layer_prop": 70, "hidden_layer_prop_pred": 256, "learning_rate": 0.001, "learning_rate_prop": 0.001, "prop_weight": 1, "reconstruction_weight": 1, "kl_weight": 1, "prop_pred": true, "prop": "energy_of_LUMO", "normalization": "standard"}
+{
+  "epochs": 1,
+  "batch": 128,
+  "validation_split": 0.1,
+  "dataset_path": "data/qm9_grammar_dataset.h5",
+  "labels_path": "data/QM9_STAR.pkl",
+  "prop_div": true,
+  "plot_title": "LUMO (eV)",
+  "n_data_plot": 30000,
+  "latent_dim": 56,
+  "input_dim": 100,
+  "anneal_kl": false,
+  "n_cycle": 1,
+  "ratio_anneal_kl": 0.8,
+  "n_layers": 3,
+  "hidden_layer_prop": 70,
+  "hidden_layer_prop_pred": 256,
+  "learning_rate": 0.001,
+  "learning_rate_prop": 0.001,
+  "prop_weight": 1,
+  "reconstruction_weight": 1,
+  "kl_weight": 1,
+  "prop_pred": true,
+  "prop": "energy_of_LUMO",
+  "normalization": "standard"
+}
