@@ -69,7 +69,9 @@ def to_one_hot(smiles):
 
     tokens = map(tokenizer, smiles)
 
-    # Parse tokens into production sequences
+    # Parse tokens into production sequences using the grammar parser
+    # Each tokenized SMILES string is parsed into a parse tree, which represents the hierarchical structure of the string based on the grammar rules.
+    # The parse tree is then converted into a sequence of production rules (grammar rules) that were applied to generate the tree.
     parse_trees = [parser.parse(t).__next__() for t in tokens]
     production_sequences = [tree.productions() for tree in parse_trees]
 
@@ -79,10 +81,16 @@ def to_one_hot(smiles):
         for sequence in production_sequences
     ]
 
-    # Initialize one-hot encoded array
+    # Initialize one-hot encoded array as a 3D tensor with dimensions:
+    # (number of SMILES, input dimension, number of grammar production rules)
     one_hot = np.zeros((len(indices), input_dim, num_grammar_rules), dtype=np.float32)
 
-    # Populate one-hot encoded array
+    # Populate the one-hot encoded array for each SMILES string
+    # For each SMILES string, the sequence of production rule indices is used to set the corresponding positions in the one-hot array to 1.0.
+    # The first dimension (i) corresponds to the SMILES string index in the batch.
+    # The second dimension (np.arange(num_productions)) corresponds to the position in the sequence.
+    # The third dimension (sequence_indices) corresponds to the grammar production rule index.
+    # Padding is applied to the remaining positions in the sequence (from num_productions to input_dim) by setting the last index (-1) to 1.0.
     for i, sequence_indices in enumerate(indices):
         num_productions = len(sequence_indices)
         one_hot[i, np.arange(num_productions), sequence_indices] = 1.0

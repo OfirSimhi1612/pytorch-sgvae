@@ -8,6 +8,22 @@ from src.models.SGVAE import Decoder, Encoder
 
 
 def get_zinc_tokenizer(cfg):
+    """
+    Creates a tokenizer function for processing SMILES strings based on a given grammar configuration.
+
+    The tokenizer replaces specific long tokens in the SMILES strings with shorter replacements
+    and then tokenizes the string into individual characters or tokens.
+
+    Args:
+        cfg: The grammar configuration object containing a lexical index of tokens.
+
+    Returns:
+        A function that takes a SMILES string as input and returns a list of tokens.
+
+    Raises:
+        AssertionError: If the number of long tokens and replacements do not match, or if a replacement
+                        token is already present in the lexical index.
+    """
     long_tokens = [a for a in list(cfg._lexical_index.keys()) if len(a) > 1]
     replacements = ["$"]
     assert len(long_tokens) == len(replacements)

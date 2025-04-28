@@ -25,7 +25,9 @@ def load_models(path):
     # Load property prediction model
     prop_pred_model_path = f"{path}/evaluation/prop_pred_model.pth"
     prop_pred_model = PropertyPredictionModel()
-    prop_pred_model.load_state_dict(torch.load(prop_pred_model_path, map_location=device))
+    prop_pred_model.load_state_dict(
+        torch.load(prop_pred_model_path, map_location=device)
+    )
     prop_pred_model.eval()
 
     return sgvae_model, prop_pred_model

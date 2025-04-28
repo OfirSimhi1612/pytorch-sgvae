@@ -36,7 +36,6 @@ def prop_run():
         "input_dim"
     ]  # it's the max number of rules needed to create a SMILES
     latent_dim = hyper_params["latent_dim"]
-    n_layers = hyper_params["n_layers"]  # num of layers for GRU decoder
     hidden_layer = hyper_params[
         "hidden_layer_prop"
     ]  # num of neurons of the property model
@@ -291,11 +290,6 @@ def no_prop_run():
     epochs = hyper_params["epochs"]
     batch = hyper_params["batch"]
     input_dim = hyper_params["input_dim"]
-    latent_dim = hyper_params["latent_dim"]
-    n_layers = hyper_params["n_layers"]  # num of layers for GRU decoder
-    hidden_layer = hyper_params[
-        "hidden_layer_prop"
-    ]  # num of neurons of the property model
     min_valid_loss = np.inf
 
     # loading the data

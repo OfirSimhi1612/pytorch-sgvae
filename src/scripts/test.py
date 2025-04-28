@@ -364,7 +364,6 @@ def property_model_training():
 
     errors = {}
     train_data = []
-    testing_error = []
     mae = []
     mse = []
     rmse = []
@@ -397,9 +396,6 @@ def property_model_training():
 
     optimizer = torch.optim.Adam(
         pp_model.parameters(), lr=hyper_params["learning_rate_prop"], amsgrad=True
-    )
-    scheduler = ReduceLROnPlateau(
-        optimizer, mode="min", patience=5, min_lr=1e-6, verbose=True
     )
     criterion = torch.nn.L1Loss()
 
@@ -463,7 +459,7 @@ def property_model_training():
             min_valid_loss = np.mean(valid_loss)
 
         else:
-            print(f"\nThe loss didn't decrease!")
+            print("\nThe loss didn't decrease!")
 
         # after each training and validation, the model will be tested on the hold-out set
         prop_pred_normalized = pp_model(list_z).cpu().detach().numpy()
